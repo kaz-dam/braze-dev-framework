@@ -4,6 +4,8 @@
   "description": "A small development environment to make it easier and more convinient to create and test content blocks or full templates that use [Liquid](https://shopify.github.io/liquid/basics/introduction/) and should be used within [Braze](https://www.braze.com).",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon server.js",
+    "watch": "watcher.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,6 +15,11 @@
     "axios": "^1.5.1",
     "brazejs": "^1.7.1",
     "chokidar": "^3.5.3",
-    "liquid-linter": "^1.0.2"
+    "express": "^4.18.2",
+    "liquid-linter": "^1.0.2",
+    "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.29.3"
   }
 }
