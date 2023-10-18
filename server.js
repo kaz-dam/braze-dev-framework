@@ -1,19 +1,11 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const FileWatcher = require("./watcher");
 
 const app = express();
 const PORT = 3000;
 
-const watcher = new FileWatcher();
-watcher.init();
-
 app.use(express.static(path.join(__dirname, "serve")));
-
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-});
 
 app.get("/", (req, res) => {
     const directoryPath = path.join(__dirname, "serve");
@@ -45,3 +37,11 @@ app.get("/", (req, res) => {
         `);
     });
 });
+
+module.exports = {
+    start: () => {
+        app.listen(PORT, () => {
+            console.log(`Server running at http://localhost:${PORT}`);
+        });
+    }
+};
