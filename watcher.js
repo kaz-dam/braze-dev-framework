@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const Liquid = require("brazejs");
 const browserSync = require("browser-sync").create();
+const LiquidContext = require("./liquid-context");
 
 class FileWatcher {
     constructor() {
@@ -22,16 +23,16 @@ class FileWatcher {
 
         this.watcher.on("change", this.handleChange.bind(this));
         this.brazeEngine = new Liquid();
+        this.liquidContext = new LiquidContext();
     }
 
     async handleChange(path) {
         console.log(`File ${path} has been changed`);
 
         let fileContent = fs.readFileSync(path, "utf8");
+        const context = this.liquidContext.getContext();
 
-        this.brazeEngine.parseAndRender(fileContent, {
-            name: 'Adam'
-        })
+        this.brazeEngine.parseAndRender(fileContent, context)
         .then(console.log)
         .catch(err => console.error(err.stack));
 
