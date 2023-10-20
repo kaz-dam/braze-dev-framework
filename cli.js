@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const server = require("./server");
-const FileWatcher = require("./watcher");
+const server = require("./src/server");
+const FileWatcher = require("./src/watcher");
 
 server.start();
 
