@@ -35,8 +35,15 @@ class FileWatcher {
 
         this.brazeEngine.parseAndRender(fileContent, context)
             .then((renderedContent) => {
-                const fileName = path.basename(filePath);
-                const savePath = path.join(this.serveDir, fileName);
+                const relativePath = path.relative(process.cwd(), filePath);
+                // const fileName = path.basename(filePath);
+                const savePath = path.join(this.serveDir, relativePath);
+
+                const dirName = path.dirname(savePath);
+
+                if (!fs.existsSync(dirName)) {
+                    fs.mkdirSync(dirName, { recursive: true });
+                }
 
                 fs.writeFileSync(savePath, renderedContent, "utf8");
                 browserSync.reload();

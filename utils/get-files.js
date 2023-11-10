@@ -17,10 +17,8 @@ const getFiles = (dir, fileList = [], relativePath = '', excludeDir = ".serve") 
     validFiles.forEach((file) => {
         const filePath = path.join(dir, file);
         if (fs.statSync(filePath).isDirectory()) {
-            // Recursive call for directories
             getFiles(filePath, fileList, path.join(relativePath, file));
         } else {
-            // Push the relative path of the file
             fileList.push(path.join(relativePath, file));
         }
     });

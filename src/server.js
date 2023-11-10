@@ -54,7 +54,6 @@ app.get("/", (req, res) => {
 app.get("*", (req, res, next) => {
     const noExtPath = req.path;
     const servePath = path.join(localDir, ".serve", noExtPath);
-    // const filePath = path.join(localDir, req.path);
     
     const acceptedExtensions = [".html", ".liquid"];
 
