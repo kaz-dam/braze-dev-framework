@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const Liquid = require("brazejs");
-// const browserSync = require("browser-sync");
 const getFiles = require("../utils/get-files");
 const LiquidContext = require("./liquid-context");
 const mirrorFiles = require("../utils/mirror-files");
@@ -17,6 +16,7 @@ const app = express();
 const PORT = 3000;
 
 const localDir = process.cwd();
+const templatesDir = path.join(__dirname, '..', 'templates');
 
 app.engine("liquid", engine.express());
 app.set("view engine", "liquid");
@@ -25,30 +25,29 @@ app.get("/", (req, res) => {
     const serveDir = path.join(localDir, ".serve");
 
     const allpaths = getFiles(serveDir);
-    // console.log(allpaths);
+    const templatePath = path.join(templatesDir, 'index.liquid');
 
     let fileLinks = allpaths
         .filter(file => file.endsWith(".html") || file.endsWith(".liquid"))
         .map(file => {
             const noExt = file.replace(/\.(html|liquid)$/, "");
-            return `<li><a href="/${noExt}">${file}</a></li>`;
-        })
-        .join("");
+            return {
+                url: noExt,
+                name: file
+            };
+        });
 
-    res.send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-        <title>Rendered HTML Files</title>
-        </head>
-        <body>
-            <h1>Files:</h1>
-            <ul>
-                ${fileLinks}
-            </ul>
-        </body>
-        </html>
-    `);
+    fs.readFile(templatePath, 'utf8', (err, templateContent) => {
+        if (err) return res.status(500).send("Failed to read template file");
+
+        engine.parseAndRender(templateContent, { links: fileLinks })
+            .then(renderedHtml => {
+                res.send(renderedHtml);
+            })
+            .catch(renderErr => {
+                res.status(500).send("Error in rendering template");
+            });
+    });
 });
 
 app.get("*", (req, res, next) => {

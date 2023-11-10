@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rendered HTML Files</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {}
+    </script>
+</head>
+<body>
+    <div class="max-w-2xl mx-auto py-16 flex flex-col gap-10">
+        <h1 class="text-4xl">Files:</h1>
+        <ul class="flex flex-col divide-y divide-slate-200">
+            {% for link in links %}
+                <li class="flex items-center py-4 px-2 hover:bg-slate-200">
+                    <a href="/{{link.url}}">{{link.name}}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
