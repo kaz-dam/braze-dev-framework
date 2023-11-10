@@ -10,9 +10,9 @@ class FileWatcher {
     constructor() {
         this.brazeEndpoint = process.env.BRAZE_API_ENDPOINT;
         const currentDir = process.cwd();
-        this.serveDir = path.join(currentDir, "serve");
+        this.serveDir = path.join(currentDir, ".serve");
         this.watcher = chokidar.watch([path.join(currentDir, "**/*.html"), path.join(currentDir, "**/*.liquid")], {
-            ignored: [/(^|[\/\\])\../, this.serveDir],
+            ignored: /(^|[\/\\])\../,
             persistent: true,
         });
     }

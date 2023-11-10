@@ -22,7 +22,7 @@ app.engine("liquid", engine.express());
 app.set("view engine", "liquid");
 
 app.get("/", (req, res) => {
-    const serveDir = path.join(localDir, "serve");
+    const serveDir = path.join(localDir, ".serve");
 
     const allpaths = getFiles(serveDir);
     // console.log(allpaths);
@@ -53,7 +53,7 @@ app.get("/", (req, res) => {
 
 app.get("*", (req, res, next) => {
     const noExtPath = req.path;
-    const servePath = path.join(localDir, "serve", noExtPath);
+    const servePath = path.join(localDir, ".serve", noExtPath);
     // const filePath = path.join(localDir, req.path);
     
     const acceptedExtensions = [".html", ".liquid"];
@@ -78,7 +78,7 @@ app.get("*", (req, res, next) => {
 
 module.exports = {
     start: () => {
-        mirrorFiles(localDir, path.join(localDir, "serve"));
+        mirrorFiles(localDir, path.join(localDir, ".serve"));
 
         app.listen(PORT, () => {
             console.log(`Server running at http://localhost:${PORT}`);

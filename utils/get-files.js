@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require('path');
 
-const getFiles = (dir, fileList = [], relativePath = '', excludeDir = "serve") => {
+const getFiles = (dir, fileList = [], relativePath = '', excludeDir = ".serve") => {
     const files = fs.readdirSync(dir);
 
     let validFiles = files.filter(file => {
