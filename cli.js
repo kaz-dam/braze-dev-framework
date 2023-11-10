@@ -8,4 +8,4 @@ server.start();
 const watcher = new FileWatcher();
 watcher.init();
 
-console.log("Watching for changes in the serve directory...");
+console.log("Watching for changes in the directory...");

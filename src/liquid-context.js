@@ -11,7 +11,7 @@ class LiquidContext {
             const contextData = fs.readFileSync(this.contextPath, "utf-8");
             return JSON.parse(contextData);
         } else {
-            console.warn(`No 'liquidContext.json' found in ${process.cwd()}. Using empty context.`);
+            console.warn(`No 'liquid-context.json' found in ${process.cwd()}. Using empty context.`);
             return {};
         }
     }

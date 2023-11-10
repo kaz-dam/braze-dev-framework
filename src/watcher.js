@@ -10,8 +10,9 @@ class FileWatcher {
     constructor() {
         this.brazeEndpoint = process.env.BRAZE_API_ENDPOINT;
         const currentDir = process.cwd();
+        this.serveDir = path.join(currentDir, "serve");
         this.watcher = chokidar.watch([path.join(currentDir, "**/*.html"), path.join(currentDir, "**/*.liquid")], {
-            ignored: /(^|[\/\\])\../,
+            ignored: [/(^|[\/\\])\../, this.serveDir],
             persistent: true,
         });
     }
@@ -26,28 +27,21 @@ class FileWatcher {
         this.liquidContext = new LiquidContext();
     }
 
-    async handleChange(path) {
-        console.log(`File ${path} has been changed`);
+    handleChange(filePath) {
+        console.log(`File ${filePath} has been changed`);
 
-        let fileContent = fs.readFileSync(path, "utf8");
+        let fileContent = fs.readFileSync(filePath, "utf8");
         const context = this.liquidContext.getContext();
 
         this.brazeEngine.parseAndRender(fileContent, context)
-        .then(console.log)
-        .catch(err => console.error(err.stack));
+            .then((renderedContent) => {
+                const fileName = path.basename(filePath);
+                const savePath = path.join(this.serveDir, fileName);
 
-        try {
-            // const response = await axios.post(this.brazeEndpoint, {
-            //     content: fileContent,
-            // });
-            // const renderedHTML = response.data;
-
-            // const tempFilePath = "./temp.html";
-            // fs.writeFileSync(tempFilePath, renderedHTML, "utf8");
-            browserSync.reload();
-        } catch (error) {
-            console.error("Error sending data to Braze:", error);
-        }
+                fs.writeFileSync(savePath, renderedContent, "utf8");
+                browserSync.reload();
+            })
+            .catch(err => console.error(err.stack));
     }
 }
 
